@@ -1,0 +1,91 @@
+Install the necessary packages, which include MySQL 10.6, PHP version 8 or higher, and Nginx on your Linux server.
+    install mariadb 10.6
+    curl-LsS-O https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
+    bashmariadb_repo_setup--mariadb-server-version=10.6
+    yum install mariadb-server
+    systemctl start mariadb
+    systemctl enable mariadb
+    systemctl status mariadb
+Secure installation
+    mysql_secure_installation
+Install PHP 8
+    yum install-y php-mbstring php-zip php-gd php-json php-curl
+    yum install-y php-fpm
+    yum install php-mysqli-y
+    php--version
+Install nginx
+    yum install-y nginx
+    systemctl start nginx
+    systemctl enable nginx
+Create a user's home directory under the '/home' directory
+    Create a user
+    useradd robin
+    passwd robin
+Setting root directory for website
+    mkdir -p /home/robin/mysite/public
+Giving permission
+    chmod -R 755 /home/robin/mysite/public
+    chown-R robin:robin /home/robin/mysite/public
+Changing selinux context
+    chcon-R-t httpd_sys_content_t /home/robin/mysite/public
+Changethe document root in nginx
+    vim /etc/nginx/nginx.conf
+Create a user's home directory under the '/home' directory
+    useradd robin
+    passwd robin
+Setting root directory for website
+    mkdir -p /home/robin/mysite/public
+Giving permission
+    chmod-R755 /home/robin/mysite/public
+    chown-R robin:robin /home/robin/mysite/public
+Changing selinux context
+    chcon-R-t httpd_sys_content_t /home/robin/mysite/public
+Changethe document root in nginx
+    vim /etc/nginx/nginx.conf
+Configure phpmyadmin access for the user to ensure secure database management
+ Installing phpmyadmin under /home/robin/mysite/public
+    cd /home/robin/mysite/public
+    wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/guages.zip
+    unzip phpMyAdmin-5.2.1-all-languages.zip
+    mv phpMyAdmin-5.2.1-all-languages.zip phpmyadmin
+    cd /home/robin/mysite/public/phpmyadmin
+Configure mariadb
+    mysql-u root-p
+    CREATEUSER'robin'@'localhost' IDENTIFIED BY 'linux';
+    GRANTALLPRIVILEGES ON*.* TO 'robin'@'localhost' WITH
+    GRANT OPTION;
+    FLUSHPRIVILEGES;
+Openconfig.inc.php
+    vim config.inc.php
+Addusername and password to the configuration file
+Accessing phpMyAdmin
+    http://<server_ip>/phpmyadmin
+    Username: robin
+    Password: linux
+Wordpress hosting
+    cd /home/robin/mysite/public
+    wget https://wordpress.org/latest.zip
+    unzip latest.zip
+    cp-Rwordpress/* .
+    chmod-R755 wp-content
+    chown-R nginx:nginx wp-content
+Configure mariadb
+    mysql-u root-p
+    CREATEDATABASEwordpress;
+    GRANTALLPRIVILEGES ONwordpress TO 'robin'@'localhost';
+    FLUSHPRIVILEGES;
+Open the wp-config.php file and add the database name,username and password
+Access the website
+    http://<server_ip>
+Install a free SSL certificate to enable secure HTTPS access to your website
+    Purchase a domain
+    Add A record
+Install certbot
+    yum install certbot python3-certbot-nginx
+    certbot--version
+obtain a free SSL Certificate
+     certbot --nginx
+Add the ssl certificate location to /etc/nginx/nginx.conf
+Openwordpress configuration file and add WP_SITEURL and WP_HOME
+Access the website
+    https://robinkjoseph.xyz
